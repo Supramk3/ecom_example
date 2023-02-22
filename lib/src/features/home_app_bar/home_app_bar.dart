@@ -2,9 +2,11 @@ import 'package:ecom_example_project/src/features/home_app_bar/more_menu_button.
 import 'package:ecom_example_project/src/features/home_app_bar/shopping_cart_icon.dart';
 import 'package:ecom_example_project/src/localization/string_hardcoded.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../constrants/breakpoints.dart';
 import '../../models/app_user.dart';
+import '../../routing/app_router.dart';
 import '../../widgets/action_text_button.dart';
 import '../account/account_screen.dart';
 import '../orders_list/orders_list_screen.dart';
@@ -49,35 +51,18 @@ class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
             ActionTextButton(
               key: MoreMenuButton.ordersKey,
               text: 'Orders'.hardcoded,
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  fullscreenDialog: true,
-                  builder: (_) => const OrdersListScreen(),
-                ),
-              ),
+              onPressed: () => context.pushNamed(AppRoute.orders.name),
             ),
             ActionTextButton(
               key: MoreMenuButton.accountKey,
               text: 'Account'.hardcoded,
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  fullscreenDialog: true,
-                  builder: (_) => const AccountScreen(),
-                ),
-              ),
+              onPressed: () => context.pushNamed(AppRoute.account.name),
             ),
           ] else
             ActionTextButton(
               key: MoreMenuButton.signInKey,
               text: 'Sign In'.hardcoded,
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  fullscreenDialog: true,
-                  builder: (_) => const EmailPasswordSignInScreen(
-                    formType: EmailPasswordSignInFormType.signIn,
-                  ),
-                ),
-              ),
+              onPressed: () => context.pushNamed(AppRoute.signIn.name),
             )
         ],
       );

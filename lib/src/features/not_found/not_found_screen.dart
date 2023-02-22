@@ -1,6 +1,7 @@
-import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
+import 'package:ecom_example_project/src/localization/string_hardcoded.dart';
 import 'package:flutter/material.dart';
-import 'package:ecommerce_app/src/features/not_found/empty_placeholder_widget.dart';
+
+import 'empty_placeholder_widget.dart';
 
 /// Simple not found screen used for 404 errors (page not found on web)
 class NotFoundScreen extends StatelessWidget {

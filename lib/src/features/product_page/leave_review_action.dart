@@ -1,5 +1,7 @@
 import 'package:ecom_example_project/src/localization/string_hardcoded.dart';
+import 'package:ecom_example_project/src/routing/app_router.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../constrants/app_sizes.dart';
 import '../../models/purchase.dart';
@@ -40,12 +42,8 @@ class LeaveReviewAction extends StatelessWidget {
                   .textTheme
                   .bodyLarge!
                   .copyWith(color: Colors.green[700]),
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  fullscreenDialog: true,
-                  builder: (_) => LeaveReviewScreen(productId: productId),
-                ),
-              ),
+              onPressed: () => context.goNamed(AppRoute.leaveReview.name,
+                  params: {'id': productId}),
             ),
           ),
           gapH8,
