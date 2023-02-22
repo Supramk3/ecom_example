@@ -2,8 +2,10 @@ import 'dart:math';
 
 import 'package:ecom_example_project/src/features/products_list/product_card.dart';
 import 'package:ecom_example_project/src/localization/string_hardcoded.dart';
+import 'package:ecom_example_project/src/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../constrants/app_sizes.dart';
 import '../../constrants/test_products.dart';
@@ -21,7 +23,7 @@ class ProductsGrid extends StatelessWidget {
         ? Center(
             child: Text(
               'No products found'.hardcoded,
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
           )
         : ProductsLayoutGrid(
@@ -30,10 +32,9 @@ class ProductsGrid extends StatelessWidget {
               final product = products[index];
               return ProductCard(
                 product: product,
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => ProductScreen(productId: product.id),
-                  ),
+                onPressed: () => context.goNamed(
+                  AppRoute.product.name,
+                  params: {'id': product.id},
                 ),
               );
             },

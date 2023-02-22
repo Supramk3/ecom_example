@@ -1,7 +1,9 @@
 import 'package:ecom_example_project/src/features/shopping_cart/shopping_cart_item.dart';
 import 'package:ecom_example_project/src/features/shopping_cart/shopping_cart_items_builder.dart';
 import 'package:ecom_example_project/src/localization/string_hardcoded.dart';
+import 'package:ecom_example_project/src/routing/app_router.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../models/item.dart';
 import '../../widgets/primary_button.dart';
@@ -41,12 +43,7 @@ class ShoppingCartScreen extends StatelessWidget {
         ),
         ctaBuilder: (_) => PrimaryButton(
           text: 'Checkout'.hardcoded,
-          onPressed: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              fullscreenDialog: true,
-              builder: (_) => const CheckoutScreen(),
-            ),
-          ),
+          onPressed: () => context.pushNamed(AppRoute.checkout.name),
         ),
       ),
     );

@@ -1,5 +1,7 @@
 import 'package:ecom_example_project/src/localization/string_hardcoded.dart';
+import 'package:ecom_example_project/src/routing/app_router.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../constrants/app_sizes.dart';
 import '../../widgets/primary_button.dart';
@@ -25,10 +27,7 @@ class EmptyPlaceholderWidget extends StatelessWidget {
             ),
             gapH32,
             PrimaryButton(
-              onPressed: () =>
-                  // * Pop all routes in the navigation stack until the home
-                  // * screen is reached.
-                  Navigator.of(context).popUntil((route) => route.isFirst),
+              onPressed: () => context.goNamed(AppRoute.home.name),
               text: 'Go Home'.hardcoded,
             )
           ],
