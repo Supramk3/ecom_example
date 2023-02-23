@@ -1,6 +1,7 @@
 import 'package:ecom_example_project/src/features/product_page/product_average_rating.dart';
 import 'package:ecom_example_project/src/features/product_page/product_reviews/product_reviews_list.dart';
 import 'package:ecom_example_project/src/localization/string_hardcoded.dart';
+import 'package:ecom_example_project/src/models/fake_products_repository.dart';
 import 'package:flutter/material.dart';
 
 import '../../constrants/app_sizes.dart';
@@ -23,8 +24,7 @@ class ProductScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: Read from data source
-    final product =
-        kTestProducts.firstWhere((product) => product.id == productId);
+    final product = FakeProductsRepository.instance.getProduct(productId);
     return Scaffold(
       appBar: const HomeAppBar(),
       body: product == null
