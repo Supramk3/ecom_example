@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:ecom_example_project/src/localization/string_hardcoded.dart';
 import 'package:ecom_example_project/src/models/fake_products_repository.dart';
+import 'package:ecom_example_project/src/widgets/async_value_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../constrants/app_sizes.dart';
@@ -15,7 +17,7 @@ import '../../widgets/item_quantity_selector.dart';
 import '../../widgets/resonsive_two_column_layout.dart';
 
 /// Shows a shopping cart item (or loading/error UI if needed)
-class ShoppingCartItem extends StatelessWidget {
+class ShoppingCartItem extends ConsumerWidget {
   const ShoppingCartItem({
     super.key,
     required this.item,
@@ -31,23 +33,23 @@ class ShoppingCartItem extends StatelessWidget {
   final bool isEditable;
 
   @override
-  Widget build(BuildContext context) {
-    // TODO: Read from data source
-    final product = FakeProductsRepository.instance.getProduct(item.productId)!;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: Sizes.p8),
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(Sizes.p16),
-          child: ShoppingCartItemContents(
-            product: product,
-            item: item,
-            itemIndex: itemIndex,
-            isEditable: isEditable,
-          ),
-        ),
-      ),
-    );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final productValue = ref.watch(productProvider(item.productId));
+    return AsyncValueWidget<Product?>(
+        value: productValue,
+        data: (product) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: Sizes.p8),
+              child: Card(
+                child: Padding(
+                    padding: const EdgeInsets.all(Sizes.p16),
+                    child: ShoppingCartItemContents(
+                      product: product!,
+                      item: item,
+                      itemIndex: itemIndex,
+                      isEditable: isEditable,
+                    )),
+              ),
+            ));
   }
 }
 
