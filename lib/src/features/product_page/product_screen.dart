@@ -2,7 +2,10 @@ import 'package:ecom_example_project/src/features/product_page/product_average_r
 import 'package:ecom_example_project/src/features/product_page/product_reviews/product_reviews_list.dart';
 import 'package:ecom_example_project/src/localization/string_hardcoded.dart';
 import 'package:ecom_example_project/src/models/fake_products_repository.dart';
+import 'package:ecom_example_project/src/widgets/async_value_widget.dart';
+import 'package:ecom_example_project/src/widgets/error_message_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constrants/app_sizes.dart';
 import '../../constrants/test_products.dart';
@@ -22,24 +25,33 @@ class ProductScreen extends StatelessWidget {
   final String productId;
 
   @override
-  Widget build(BuildContext context) {
-    // TODO: Read from data source
-    final product = FakeProductsRepository.instance.getProduct(productId);
+  Widget build(
+    BuildContext context,
+  ) {
     return Scaffold(
       appBar: const HomeAppBar(),
-      body: product == null
-          ? EmptyPlaceholderWidget(
-              message: 'Product not found'.hardcoded,
-            )
-          : CustomScrollView(
-              slivers: [
-                ResponsiveSliverCenter(
-                  padding: const EdgeInsets.all(Sizes.p16),
-                  child: ProductDetails(product: product),
-                ),
-                ProductReviewsList(productId: productId),
-              ],
-            ),
+      body: Consumer(
+        builder: (context, ref, _) {
+          final productValue = ref.watch(productProvider(productId));
+          return AsyncValueWidget<Product?>(
+            value: productValue,
+            data: (product) => product == null
+                ? EmptyPlaceholderWidget(
+                    message: 'Product not found'.hardcoded,
+                  )
+                : CustomScrollView(slivers: [
+                    ResponsiveSliverCenter(
+                      padding: const EdgeInsets.all(Sizes.p16),
+                      child: ProductDetails(product: product),
+                    ),
+                    ProductReviewsList(productId: productId),
+                  ]),
+          );
+
+          // final productsRepository = ref.watch(productsRepositoryProvider);
+          // final product = productsRepository.getProduct(productId);
+        },
+      ),
     );
   }
 }

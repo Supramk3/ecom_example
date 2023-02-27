@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:ecom_example_project/src/app.dart';
 import 'package:ecom_example_project/src/localization/string_hardcoded.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 void main() async {
@@ -12,7 +13,7 @@ void main() async {
     WidgetsFlutterBinding.ensureInitialized();
     // * Entry point of the app
 
-    runApp(const MyApp());
+    runApp(const ProviderScope(child: MyApp()));
 
     // * This code will present some error UI if any uncaught exception happens
     FlutterError.onError = (FlutterErrorDetails details) {
