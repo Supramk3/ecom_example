@@ -1,6 +1,8 @@
+import 'package:ecom_example_project/src/features/authentication/data/fake_auth_repository.dart';
 import 'package:ecom_example_project/src/localization/string_hardcoded.dart';
 import 'package:ecom_example_project/src/widgets/alert_dialogs.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constrants/app_sizes.dart';
 import '../../models/app_user.dart';
@@ -8,11 +10,11 @@ import '../../widgets/action_text_button.dart';
 import '../../widgets/responsive_center.dart';
 
 /// Simple account screen showing some user info and a logout button.
-class AccountScreen extends StatelessWidget {
+class AccountScreen extends ConsumerWidget {
   const AccountScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Account'.hardcoded),
@@ -28,7 +30,9 @@ class AccountScreen extends StatelessWidget {
                 defaultActionText: 'Logout'.hardcoded,
               );
               if (logout == true) {
-                // TODO: Sign out the user.
+                await ref.read(authRepositoryProvider).signOut();
+
+                // to do only pop on success
                 Navigator.of(context).pop();
               }
             },
