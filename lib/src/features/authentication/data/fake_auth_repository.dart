@@ -12,6 +12,8 @@ class FakeAuthRepository {
 
   Future<void> signInWithEmailAndPassoword(
       String email, String password) async {
+    await Future.delayed(const Duration(seconds: 3));
+    // throw Exception('Connection Failed');
     if (currentUser == null) {
       _createNewUser(email);
     }
