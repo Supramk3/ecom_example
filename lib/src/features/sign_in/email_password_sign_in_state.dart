@@ -1,5 +1,6 @@
 import 'package:ecom_example_project/src/features/sign_in/string_validators.dart';
 import 'package:ecom_example_project/src/localization/string_hardcoded.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Form type for email & password authentication
 enum EmailPasswordSignInFormType { signIn, register }
@@ -17,19 +18,21 @@ mixin EmailAndPasswordValidators {
 class EmailPasswordSignInState with EmailAndPasswordValidators {
   EmailPasswordSignInState({
     this.formType = EmailPasswordSignInFormType.signIn,
-    this.isLoading = false,
+    this.value = const AsyncValue.data(null),
   });
 
   final EmailPasswordSignInFormType formType;
-  final bool isLoading;
+  final AsyncValue<void> value;
+
+  bool get isLoading => value.isLoading;
 
   EmailPasswordSignInState copyWith({
     EmailPasswordSignInFormType? formType,
     bool? isLoading,
+    AsyncValue? value,
   }) {
     return EmailPasswordSignInState(
       formType: formType ?? this.formType,
-      isLoading: isLoading ?? this.isLoading,
     );
   }
 
