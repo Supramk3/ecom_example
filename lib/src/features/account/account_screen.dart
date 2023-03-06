@@ -1,5 +1,7 @@
+import 'package:ecom_example_project/src/features/account/account_screen_controller.dart';
 import 'package:ecom_example_project/src/features/authentication/data/fake_auth_repository.dart';
 import 'package:ecom_example_project/src/localization/string_hardcoded.dart';
+import 'package:ecom_example_project/src/utils/async_value_ui.dart';
 import 'package:ecom_example_project/src/widgets/alert_dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,27 +17,43 @@ class AccountScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<AsyncValue>(
+      accountScreenControllerProvider,
+      (_, state) => state.showAlertDialogOnError(context),
+    );
+    final state = ref.watch(accountScreenControllerProvider);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Account'.hardcoded),
+        title: state.isLoading
+            ? const CircularProgressIndicator()
+            : Text('Account'.hardcoded),
         actions: [
           ActionTextButton(
             text: 'Logout'.hardcoded,
-            onPressed: () async {
-              // showNotImplementedAlertDialog(context: context);
-              final logout = await showAlertDialog(
-                context: context,
-                title: 'Are you sure?'.hardcoded,
-                cancelActionText: 'Cancel'.hardcoded,
-                defaultActionText: 'Logout'.hardcoded,
-              );
-              if (logout == true) {
-                await ref.read(authRepositoryProvider).signOut();
+            onPressed: state.isLoading
+                ? null
+                : () async {
+                    // showNotImplementedAlertDialog(context: context);
+                    final logout = await showAlertDialog(
+                      context: context,
+                      title: 'Are you sure?'.hardcoded,
+                      cancelActionText: 'Cancel'.hardcoded,
+                      defaultActionText: 'Logout'.hardcoded,
+                    );
+                    if (logout == true) {
+                      final sucess = await ref
+                          .read(accountScreenControllerProvider.notifier)
+                          .signOut();
 
-                // to do only pop on success
-                Navigator.of(context).pop();
-              }
-            },
+                      if (sucess) {
+                        Navigator.of(context).pop();
+                      }
+
+                      // to do only pop on success
+                      // Navigator.of(context).pop();
+                    }
+                  },
           ),
         ],
       ),
@@ -48,14 +66,13 @@ class AccountScreen extends ConsumerWidget {
 }
 
 /// Simple user data table showing the uid and email
-class UserDataTable extends StatelessWidget {
+class UserDataTable extends ConsumerWidget {
   const UserDataTable({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final style = Theme.of(context).textTheme.subtitle2!;
-    // TODO: get user from auth repository
-    const user = AppUser(uid: '123', email: 'test@test.com');
+  Widget build(BuildContext context, WidgetRef ref) {
+    final style = Theme.of(context).textTheme.titleSmall!;
+    final user = ref.watch(authStateProvider).value;
     return DataTable(
       columns: [
         DataColumn(
@@ -74,12 +91,12 @@ class UserDataTable extends StatelessWidget {
       rows: [
         _makeDataRow(
           'uid'.hardcoded,
-          user.uid,
+          user?.uid ?? '',
           style,
         ),
         _makeDataRow(
           'email'.hardcoded,
-          user.email ?? '',
+          user?.email ?? '',
           style,
         ),
       ],
