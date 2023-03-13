@@ -1,3 +1,4 @@
+import 'package:ecom_example_project/src/utils/delay.dart';
 import 'package:ecom_example_project/src/utils/in_memory_store.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/subjects.dart';
@@ -5,6 +6,8 @@ import 'package:rxdart/subjects.dart';
 import '../../../models/app_user.dart';
 
 class FakeAuthRepository {
+  FakeAuthRepository({this.addDelay = true});
+  final bool addDelay;
   final _authState = InMemoryStore<AppUser?>(null);
 
   Stream<AppUser?> authStateChanges() => _authState.stream;
@@ -12,7 +15,8 @@ class FakeAuthRepository {
 
   Future<void> signInWithEmailAndPassoword(
       String email, String password) async {
-    await Future.delayed(const Duration(seconds: 3));
+    await delay(addDelay);
+    // await Future.delayed(const Duration(seconds: 3));
     // throw Exception('Connection Failed');
     if (currentUser == null) {
       _createNewUser(email);
@@ -21,6 +25,7 @@ class FakeAuthRepository {
 
   Future<void> createUserWithEmailAndPassword(
       String email, String password) async {
+    await delay(addDelay);
     if (currentUser == null) {
       _createNewUser(email);
     }

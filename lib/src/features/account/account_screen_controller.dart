@@ -1,7 +1,7 @@
 import 'package:ecom_example_project/src/features/authentication/data/fake_auth_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AccountScreenController extends StateNotifier<AsyncValue> {
+class AccountScreenController extends StateNotifier<AsyncValue<void>> {
   // state notifier always need an inital value,  constructor using super
   AccountScreenController({required this.authRepository})
       : super(const AsyncValue.data(null));
@@ -23,9 +23,8 @@ class AccountScreenController extends StateNotifier<AsyncValue> {
   }
 }
 
-final accountScreenControllerProvider =
-    StateNotifierProvider.autoDispose<AccountScreenController, AsyncValue>(
-        (ref) {
+final accountScreenControllerProvider = StateNotifierProvider.autoDispose<
+    AccountScreenController, AsyncValue<void>>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
   return AccountScreenController(authRepository: authRepository);
 });
